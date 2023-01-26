@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'main'
 ]
 
 MIDDLEWARE = [
@@ -79,9 +80,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'ecom',
         'USER': os.environ.get("POSTGRES_USER", "postgres"),
-        'PASSWORD': os.environ.get("POSTGRES_PASSWORD", "pgadminpass"),
+        'PASSWORD': os.environ.get("POSTGRES_PASSWORD", "mysecretpassword"),
         'HOST': 'localhost',
-        'PORT': '5432'
+        'PORT': '5433'   #ЗАМЕНИТЬ ПОРТ НА 5432 ДЛЯ УДАЛЕННОЙ МАШИНЫ!
     }
 }
 
