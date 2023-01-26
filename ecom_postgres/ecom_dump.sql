@@ -34,20 +34,6 @@ CREATE TABLE public.cart (
 ALTER TABLE public.cart OWNER TO postgres;
 
 --
--- Name: cart_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-ALTER TABLE public.cart ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
-    SEQUENCE NAME public.cart_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1
-);
-
-
---
 -- Name: products; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -102,13 +88,6 @@ COPY public.products (id, product, price, details) FROM stdin;
 
 
 --
--- Name: cart_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.cart_id_seq', 1, false);
-
-
---
 -- Name: products_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -132,11 +111,11 @@ ALTER TABLE ONLY public.products
 
 
 --
--- Name: cart cart_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: cart fk_id_product; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.cart
-    ADD CONSTRAINT cart_id_fkey FOREIGN KEY (id) REFERENCES public.products(id);
+    ADD CONSTRAINT fk_id_product FOREIGN KEY (id) REFERENCES public.products(id);
 
 
 --

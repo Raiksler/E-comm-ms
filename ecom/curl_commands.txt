@@ -1,1 +1,10 @@
 Добавление нового товара: curl -X POST http://127.0.0.1:8000/newitem -H 'Content-Type: application/json' -d '{"product":"iphone 4s","price":"8000"}'
+Добавление/удаление товаров из корзины: curl -X POST http://127.0.0.1:8000/cart/add_item -H 'Content-Type: application/json' -d '{"id":4, "quantity":3}'
+Получение списка всех товаров в наличии (не упорядочено): curl http://127.0.0.1:8000/items
+127.0.0.1:8000/items?sorted_by_name=a-z
+127.0.0.1:8000/items?sorted_by_name=z-a
+127.0.0.1:8000/items?sorted_by_price=up
+127.0.0.1:8000/items?sorted_by_price=down
+127.0.0.1:8000/items?filtered_by_name=<query>
+127.0.0.1:8000/items?filtered_by_price=<query>
+

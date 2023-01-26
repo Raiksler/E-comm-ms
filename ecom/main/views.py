@@ -7,21 +7,21 @@ import ast
 def filtered_by_name(item_list, query):
     if query == None:
         return
-    return list(filter(lambda x: query in x[0], item_list))
+    return list(filter(lambda x: query in x[1], item_list))
 
 def filtered_by_price(item_list, price):
     if price == None:
         return
-    return list(filter(lambda x: int(price) == x[1], item_list))
+    return list(filter(lambda x: int(price) == x[2], item_list))
 
 
 def sorted_by_name(item_list, is_reversed):
-    item_list = sorted(item_list, key=lambda x: x[0], reverse=is_reversed)
+    item_list = sorted(item_list, key=lambda x: x[1], reverse=is_reversed)
     return item_list
 
 
 def sorted_by_price(item_list, is_reversed):
-    item_list = sorted(item_list, key=lambda x: x[1], reverse=is_reversed)
+    item_list = sorted(item_list, key=lambda x: x[2], reverse=is_reversed)
     return item_list
 
 
@@ -29,10 +29,10 @@ def get_items(request):
     if request.GET.get('sorted_by_name') != None and request.GET.get('sorted_by_price') != None: #Если одновременно применена сортировка по цене и имени - возвращаем 500.
         return HttpResponse(status=500)
 
-    items_queryset = list(Products.objects.all().values('product', 'price'))                    #Достаем данные о товарах и ценах из бд.
+    items_queryset = list(Products.objects.all().values('id', 'product', 'price'))                    #Достаем данные о товарах и ценах из бд.
     response = list()
     for item in items_queryset:
-        response.append((item['product'], item['price']))
+        response.append((item['id'], item['product'], item['price']))
 
     if request.GET.get('filtered_by_name') != None:                         #Проверяем, запрошена ли фильтрация по имени.
         query = request.GET.get('filtered_by_name')
@@ -56,16 +56,20 @@ def get_items(request):
 
     if request.GET.get('filtered_by_name') != None or request.GET.get('sorted_by_name') != None or request.GET.get('sorted_by_price') != None or request.GET.get('filtered_by_price') != None:
         response_dict = {}
+        print(response)
+        i = 0
         for item in response:
-            response_dict[item[0]] = item[1]
-        return JsonResponse({"items" : response_dict})
+            response_dict[i] = {"product_id" : item[0], "product_name": item[1]}
+            i+=1
+        print(response_dict)
+        return JsonResponse(response_dict)
 
     #Если запрос не содержит query параметров, возвращаем список всех товаров и цен на них.
 
-    items_queryset = list(Products.objects.all().values('product', 'price'))
+    items_queryset = list(Products.objects.all().values('id', 'product', 'price'))
     items_dict = {}
     for item in items_queryset:
-        items_dict[item['product']] = item['price']
+        items_dict[item['id']] = {"product_name" : item["product"], "price" : item['price']}
     return JsonResponse(items_dict)
 
 
@@ -88,4 +92,12 @@ def new_item(request):
     return HttpResponse(status=200)
 
 def get_details(request):
-    pass
+    target_product = request.GET.get("id")
+    if target_product != None:
+        product_queryset = list(Products.objects.filter(pk=target_product))[0]
+        product_id = getattr(product_queryset, "id")
+        product_name = getattr(product_queryset, "product")
+        product_price = getattr(product_queryset, "price")
+        product_details = getattr(product_queryset, "details")
+        product_dict = {"info" : {'id' : product_id, "name" : product_name, "price" : product_price, "details" : product_details}}
+        return JsonResponse(product_dict)
