@@ -1,0 +1,1 @@
+Добавление нового товара: curl -X POST http://127.0.0.1:8000/newitem -H 'Content-Type: application/json' -d '{"product":"iphone 4s","price":"8000"}'

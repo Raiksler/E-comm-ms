@@ -1,7 +1,8 @@
 from django.db import models
 
+
 class Cart(models.Model):
-    product = models.CharField(primary_key=True, max_length=255)
+    id = models.OneToOneField('Products', models.DO_NOTHING, db_column='id', primary_key=True)
     price = models.BigIntegerField(blank=True, null=True)
     quantity = models.BigIntegerField(blank=True, null=True)
 
@@ -14,6 +15,7 @@ class Products(models.Model):
     id = models.AutoField(primary_key=True)
     product = models.CharField(max_length=255, blank=True, null=True)
     price = models.BigIntegerField(blank=True, null=True)
+    details = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         managed = False
