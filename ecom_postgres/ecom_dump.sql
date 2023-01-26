@@ -25,7 +25,7 @@ SET default_table_access_method = heap;
 --
 
 CREATE TABLE public.cart (
-    product character varying(255) NOT NULL,
+    id bigint NOT NULL,
     price bigint,
     quantity bigint
 );
@@ -34,13 +34,28 @@ CREATE TABLE public.cart (
 ALTER TABLE public.cart OWNER TO postgres;
 
 --
+-- Name: cart_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+ALTER TABLE public.cart ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public.cart_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
 -- Name: products; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.products (
     id bigint NOT NULL,
     product character varying(255),
-    price bigint
+    price bigint,
+    details character varying(255)
 );
 
 
@@ -64,7 +79,7 @@ ALTER TABLE public.products ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
 -- Data for Name: cart; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.cart (product, price, quantity) FROM stdin;
+COPY public.cart (id, price, quantity) FROM stdin;
 \.
 
 
@@ -72,18 +87,25 @@ COPY public.cart (product, price, quantity) FROM stdin;
 -- Data for Name: products; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.products (id, product, price) FROM stdin;
-1	Samsung Galaxy S22	66430
-2	iPhone 14 Pro	111940
-3	Google Pixel 7 Pro	56961
-4	Oppo Find X5 Pro	61087
-5	Google Pixel 6a	25631
-6	iPhone 14	58270
-7	Samsung Galaxy Z Flip 4	50290
-8	Vivo X80 Pro	45238
-9	Motorola Edge 30 Ultra	26609
-10	OnePlus 10 Pro	39940
+COPY public.products (id, product, price, details) FROM stdin;
+1	Samsung Galaxy S22	66430	some details about product
+2	iPhone 14 Pro	111940	some details about product
+3	Google Pixel 7 Pro	56961	some details about product
+4	Oppo Find X5 Pro	61087	some details about product
+5	Google Pixel 6a	25631	some details about product
+6	iPhone 14	58270	some details about product
+7	Samsung Galaxy Z Flip 4	50290	some details about product
+8	Vivo X80 Pro	45238	some details about product
+9	Motorola Edge 30 Ultra	26609	some details about product
+10	OnePlus 10 Pro	39940	some details about product
 \.
+
+
+--
+-- Name: cart_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.cart_id_seq', 1, false);
 
 
 --
@@ -98,7 +120,7 @@ SELECT pg_catalog.setval('public.products_id_seq', 10, true);
 --
 
 ALTER TABLE ONLY public.cart
-    ADD CONSTRAINT cart_pkey PRIMARY KEY (product);
+    ADD CONSTRAINT cart_pkey PRIMARY KEY (id);
 
 
 --
@@ -107,6 +129,14 @@ ALTER TABLE ONLY public.cart
 
 ALTER TABLE ONLY public.products
     ADD CONSTRAINT products_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cart cart_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.cart
+    ADD CONSTRAINT cart_id_fkey FOREIGN KEY (id) REFERENCES public.products(id);
 
 
 --

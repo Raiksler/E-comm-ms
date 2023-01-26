@@ -12,7 +12,7 @@ def filtered_by_name(item_list, query):
 def filtered_by_price(item_list, price):
     if price == None:
         return
-    return list(filter(lambda x: price == x[1], item_list))
+    return list(filter(lambda x: int(price) == x[1], item_list))
 
 
 def sorted_by_name(item_list, is_reversed):
@@ -87,4 +87,5 @@ def new_item(request):
     Products.objects.create(product=new_product, price=new_price, details=new_details)   #Обновляем бд.
     return HttpResponse(status=200)
 
-def get_details(request)
+def get_details(request):
+    pass
