@@ -83,7 +83,7 @@ DATABASES = {
         'USER': os.environ.get("POSTGRES_USER", "postgres"),
         'PASSWORD': os.environ.get("POSTGRES_PASSWORD", "mysecretpassword"),
         'HOST': 'localhost',
-        'PORT': '5433'   #ЗАМЕНИТЬ ПОРТ НА 5432 ДЛЯ УДАЛЕННОЙ МАШИНЫ!
+        'PORT': '5432'
     }
 }
 
