@@ -56,12 +56,10 @@ def get_items(request):
 
     if request.GET.get('filtered_by_name') != None or request.GET.get('sorted_by_name') != None or request.GET.get('sorted_by_price') != None or request.GET.get('filtered_by_price') != None:
         response_dict = {}
-        print(response)
         i = 0
         for item in response:
             response_dict[i] = {"product_id" : item[0], "product_name": item[1]}
             i+=1
-        print(response_dict)
         return JsonResponse(response_dict)
 
     #Если запрос не содержит query параметров, возвращаем список всех товаров и цен на них.
